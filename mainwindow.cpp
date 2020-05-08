@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "rules.h"
 
 int botLevel = 1;
 
@@ -29,4 +30,10 @@ void MainWindow::on_btn_level_clicked()
         botLevel = 1;
         ui->btn_level->setText("LEVEL: EASY");
     }
+}
+
+void MainWindow::on_btn_rules_clicked()
+{
+    Rules rulesWindow;
+    rulesWindow.exec();
 }
