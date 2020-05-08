@@ -6,16 +6,54 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1920</width>
+    <height>1040</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Toads Battle</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar"/>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="btn_startGame">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>410</y>
+      <width>211</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>START GAME</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_level">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>470</y>
+      <width>211</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>LEVEL: EASY</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_rules">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>530</y>
+      <width>211</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RULES</string>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>
