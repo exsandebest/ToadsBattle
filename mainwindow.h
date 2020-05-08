@@ -20,6 +20,8 @@ private slots:
 
     void on_btn_rules_clicked();
 
+    void on_btn_startGame_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
