@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <basicstructures.h>
+#include <vector>
 
 namespace Ui {
 class Game;
@@ -19,6 +20,11 @@ public:
     void setOriginalBorderColor(QPoint);
     void setSelectedBorderColor(QPoint);
     void makeStep(QPoint, QPoint);
+    std::vector<std::vector<int>> fieldToNum();
+    void setEmptyIcon(QPoint);
+    void setPlayerIcon(QPoint);
+    void setBotIcon(QPoint);
+    void checkEnd();
 
 private slots:
     void btnGameClicked();

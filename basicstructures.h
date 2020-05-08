@@ -12,7 +12,7 @@ public:
 		x = a;
 		y = b;
 	}
-	~point();	
+    ~point(){};
 };
 
 
@@ -29,7 +29,7 @@ public:
 		endPoint = B;
 	}
 
-	~step();
+    ~step(){};
 	
 };
 
