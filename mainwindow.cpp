@@ -12,6 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->showMaximized();
+    QPixmap pix(":src/img/backgound_menu.png");
+    pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette pal;
+    pal.setBrush(QPalette::Background, pix);
+    this->setPalette(pal);
 }
 
 MainWindow::~MainWindow()

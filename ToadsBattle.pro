@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     dialog.cpp \
+    end.cpp \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 HEADERS += \
     dialog.h \
+    end.h \
     game.h \
     mainwindow.h \
     rules.h \
@@ -33,6 +35,7 @@ HEADERS += \
 
 FORMS += \
     dialog.ui \
+    end.ui \
     game.ui \
     mainwindow.ui \
     rules.ui

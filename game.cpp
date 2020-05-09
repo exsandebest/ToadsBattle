@@ -4,6 +4,7 @@
 #include "bots.h"
 #include "qmath.h"
 #include <QPushButton>
+#include "end.h"
 
 
 extern int botLevel;
@@ -21,6 +22,7 @@ toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
 int playerScore = 2;
 int botScore = 2;
 int selectionState = 0;
+int gameResult = 0;
 QPoint selected;
 
 QPushButton * field[fieldSize][fieldSize];
@@ -165,6 +167,14 @@ void Game::checkEnd(){
             if (field[i][j]->property("state").toInt() == emptyCell) return;
         }
     }
-    //win someone
+    if (playerScore > botScore){
+        gameResult = 1;
+    } else if (playerScore < botScore) {
+        gameResult = -1;
+    } else if (playerScore == botScore){
+        gameResult = 0;
+    }
+    End endWindow;
+    endWindow.exec();
     this->close();
 }
