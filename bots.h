@@ -12,20 +12,23 @@ class toadsBattleBots
 {
 public:
 	toadsBattleBots();
+	toadsBattleBots(int tSize, int complexity, int number);
 	~toadsBattleBots();
-	step nextStep(const std::vector<std::vector<int> >& table, const int tableSize, const int botComplexity, const int playerNumber);
+	step nextStep(const std::vector<std::vector<int> >& table);
 private:
 	const double POTENTIAL_DANGER_FACTOR = 0.5;
 	const double RANDOM_FACTOR = 0.01;
+
+	int tableSize, botComplexity, playerNumber;
 		
-	std::vector<step> getStepsPool(const std::vector<std::vector<int> >& table, const int playerNumber);
-	std::vector<std::vector<bool> > getInfluenceTable(const std::vector<std::vector<int> >& table, const int playerNumber);
-	double countPlayerCells(const std::vector<std::vector<int> >& table, const int playerNumber);
-	double countPlayerInfluence(const std::vector<std::vector<int> >& table, const int playerNumber);
+	std::vector<step> getStepsPool(const std::vector<std::vector<int> >& table);
+	std::vector<std::vector<bool> > getInfluenceTable(const std::vector<std::vector<int> >& table);
+	double countPlayerCells(const std::vector<std::vector<int> >& table);
+	double countPlayerInfluence(const std::vector<std::vector<int> >& table);
 	
-	double firstLevelBotWeightFunction(const step probablyNextStep);
-	double secondLevelBotWeightFunction(const step probablyNextStep);
-	double thirdLevelBotWeightFunction(const step probablyNextStep);
+	double firstLevelBotWeightFunction(const step probablyNextStep, const std::vector<std::vector<int> >& table);
+	double secondLevelBotWeightFunction(const step probablyNextStep, const std::vector<std::vector<int> >& table);
+	double thirdLevelBotWeightFunction(const step probablyNextStep, const std::vector<std::vector<int> >& table);
 };
 
 #endif
