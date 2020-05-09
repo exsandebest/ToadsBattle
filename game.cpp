@@ -16,12 +16,11 @@ const QString playerSprite = ":/src/img/sprite_player.png";
 const QString botSprite = ":/src/img/sprite_bot_" + QString::number(botLevel) + ".png";
 const QString emptyCellSprite = ":/src/img/sprite_empty_cell.png";
 const QString protectedCellSprite = ":/src/img/sprite_protected_cell.png";
-toadsBattleBots *bot = new toadsBattleBots(); // fieldSize, botLevel, 2
+toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
 
 int playerScore = 2;
 int botScore = 2;
 int selectionState = 0;
-int step = 0;
 QPoint selected;
 
 QPushButton * field[fieldSize][fieldSize];
@@ -79,7 +78,7 @@ void Game::btnGameClicked(){
         // propertyState == emptyCell
         makeStep(selected, btn->property("coords").toPoint());
         checkEnd();
-        class step botStep = bot->nextStep(fieldToNum(), fieldSize, botLevel, 2); // fieldtoNum()
+        class step botStep = bot->nextStep(fieldToNum()); 
         makeStep(QPoint(botStep.beginPoint.x, botStep.beginPoint.y), QPoint(botStep.endPoint.x, botStep.endPoint.y));
         checkEnd();
     }
