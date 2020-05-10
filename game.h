@@ -21,9 +21,10 @@ public:
     void setSelectedBorderColor(QPoint);
     void makeStep(QPoint, QPoint);
     std::vector<std::vector<int>> fieldToNum();
-    void setEmptyIcon(QPoint);
-    void setPlayerIcon(QPoint);
-    void setBotIcon(QPoint);
+    void setEmptyCell(QPoint);
+    void setPlayerCell(QPoint);
+    void setBotCell(QPoint);
+    void setProtectedCell(QPoint);
     void checkEnd();
 
 private slots:

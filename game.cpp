@@ -40,19 +40,18 @@ Game::Game(QWidget *parent) :
             btn->setFlat(true);
             btn->setMaximumSize(QSize(100,100));
             btn->setProperty("coords", QPoint(i, j));
-            btn->setProperty("state", emptyCell);
             btn->setObjectName("btnGame");
-            btn->setIcon(QIcon(emptyCellSprite));
             btn->setStyleSheet("border-radius: 5px; border: 2px solid black;");
             QObject :: connect(btn, SIGNAL(clicked()), this, SLOT(btnGameClicked()));
             field[i][j] = btn;
+            setEmptyCell(QPoint(i, j));
             ui->layout_game->addWidget(btn, i,j);
         }
     }
-    field[0][0]->setProperty("state", firstPlayerCell);
-    field[0][fieldSize-1]->setProperty("state", firstPlayerCell);
-    field[fieldSize-1][0]->setProperty("state", secondPlayerCell);
-    field[fieldSize-1][fieldSize-1]->setProperty("state", secondPlayerCell);
+    setPlayerCell(QPoint(0, 0));
+    setPlayerCell(QPoint(0, fieldSize - 1));
+    setBotCell(QPoint(fieldSize - 1, 0));
+    setBotCell(QPoint(fieldSize - 1, fieldSize - 1));
 }
 
 Game::~Game()
@@ -104,16 +103,15 @@ void Game::makeStep(QPoint p1, QPoint p2){
     btn2->setProperty("state", btn1->property("state"));
     int target;
     if (btn1->property("state").toInt() == firstPlayerCell){
-        setPlayerIcon(p2);
+        setPlayerCell(p2);
         target = secondPlayerCell;
     } else {
-        setBotIcon(p2);
+        setBotCell(p2);
         target = firstPlayerCell;
     }
 
     if (abs(p1.x() - p2.x()) > cloneSize && abs(p2.x() - p2.y()) > cloneSize){
-        btn1->setProperty("state", emptyCell);
-        setEmptyIcon(p1);
+        setEmptyCell(p1);
     } else {
         if (target == secondPlayerCell){
             ++playerScore;
@@ -126,10 +124,10 @@ void Game::makeStep(QPoint p1, QPoint p2){
         for (int j = qMax(0, p2.y() - grabSize); j <= qMin(fieldSize - 1, p2.y() + grabSize); ++j){
             if (field[i][j]->property("state").toInt() == target){
                 if (target == firstPlayerCell){
-                    setBotIcon(QPoint(i, j));
+                    setBotCell(QPoint(i, j));
                     ++botScore;
                 } else {
-                    setPlayerIcon(QPoint(i, j));
+                    setPlayerCell(QPoint(i, j));
                     ++playerScore;
                 }
             }
@@ -149,16 +147,24 @@ std::vector<std::vector<int>> Game::fieldToNum(){
     return v;
 }
 
-void Game::setEmptyIcon(QPoint p) {
+void Game::setProtectedCell(QPoint p){
+    field[p.x()][p.y()]->setIcon(QIcon(protectedCellSprite));
+    field[p.x()][p.y()]->setProperty("state", protectedCell);
+}
+
+void Game::setEmptyCell(QPoint p) {
     field[p.x()][p.y()]->setIcon(QIcon(emptyCellSprite));
+    field[p.x()][p.y()]->setProperty("state", emptyCell);
 }
 
-void Game::setPlayerIcon(QPoint p) {
+void Game::setPlayerCell(QPoint p) {
     field[p.x()][p.y()]->setIcon(QIcon(playerSprite));
+    field[p.x()][p.y()]->setProperty("state", firstPlayerCell);
 }
 
-void Game::setBotIcon(QPoint p){
+void Game::setBotCell(QPoint p){
     field[p.x()][p.y()]->setIcon(QIcon(botSprite));
+    field[p.x()][p.y()]->setProperty("state", secondPlayerCell);
 }
 
 void Game::checkEnd(){
