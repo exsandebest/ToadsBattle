@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>850</x>
-      <y>410</y>
+      <y>520</y>
       <width>211</width>
       <height>41</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>850</x>
-      <y>470</y>
+      <y>580</y>
       <width>211</width>
       <height>41</height>
      </rect>
@@ -44,13 +44,39 @@
     <property name="geometry">
      <rect>
       <x>850</x>
-      <y>530</y>
+      <y>640</y>
       <width>211</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
      <string>RULES</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_title">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>40</y>
+      <width>781</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_toad_main">
+    <property name="geometry">
+     <rect>
+      <x>1160</x>
+      <y>510</y>
+      <width>551</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

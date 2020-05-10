@@ -9,7 +9,7 @@ Dialog::Dialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->showMaximized();
-    QPixmap pix(":src/img/dialog_level_" + QString::number(botLevel) + ".jpg");
+    QPixmap pix(":img/dialog_level_" + QString::number(botLevel) + ".jpg");
     pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette pal;
     pal.setBrush(QPalette::Background, pix);

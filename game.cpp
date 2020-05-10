@@ -6,17 +6,16 @@
 #include <QPushButton>
 #include "end.h"
 
-
 extern int botLevel;
 
 const int fieldSize = 8;
 const int stepSize = 2;
 const int cloneSize = 1;
 const int grabSize = 1;
-const QString playerSprite = ":/src/img/sprite_player.png";
-const QString botSprite = ":/src/img/sprite_bot_" + QString::number(botLevel) + ".png";
-const QString emptyCellSprite = ":/src/img/sprite_empty_cell.png";
-const QString protectedCellSprite = ":/src/img/sprite_protected_cell.png";
+const QString playerCellSprite = ":img/cell_player.png";
+QString botCellSprite = "";
+const QString emptyCellSprite = ":img/sprite_empty_cell.png";
+const QString protectedCellSprite = ":img/sprite_protected_cell.png";
 toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
 
 int playerScore = 2;
@@ -34,6 +33,7 @@ Game::Game(QWidget *parent) :
 {
     ui->setupUi(this);
     this->showMaximized();
+    botCellSprite = ":img/cell_bot_" + QString::number(botLevel) + ".png";
     for (int i = 0; i < fieldSize; ++i){
         for (int j = 0; j < fieldSize; ++j){
             QPushButton * btn = new QPushButton();
@@ -41,16 +41,16 @@ Game::Game(QWidget *parent) :
             btn->setMaximumSize(QSize(100,100));
             btn->setProperty("coords", QPoint(i, j));
             btn->setObjectName("btnGame");
-            btn->setStyleSheet("border-radius: 5px; border: 2px solid black;");
             QObject :: connect(btn, SIGNAL(clicked()), this, SLOT(btnGameClicked()));
             field[i][j] = btn;
             setEmptyCell(QPoint(i, j));
+            setOriginalBorderColor(QPoint(i, j));
             ui->layout_game->addWidget(btn, i,j);
         }
     }
     setPlayerCell(QPoint(0, 0));
-    setPlayerCell(QPoint(0, fieldSize - 1));
-    setBotCell(QPoint(fieldSize - 1, 0));
+    setPlayerCell(QPoint(fieldSize - 1, 0));
+    setBotCell(QPoint(0, fieldSize - 1));
     setBotCell(QPoint(fieldSize - 1, fieldSize - 1));
 }
 
@@ -68,18 +68,21 @@ void Game::btnGameClicked(){
         selected = btn->property("coords").toPoint();
         setSelectedBorderColor(selected);
     } else if (selectionState == 1) {
-        if (propertyState == protectedCell || propertyState == secondPlayerCell ||
-                !checkAccess(selected, btn->property("coords").toPoint())) return;
-        if (propertyState == firstPlayerCell){
+        if (propertyState == protectedCell || propertyState == secondPlayerCell) {
+            return;
+        } else if (propertyState == firstPlayerCell){
             setOriginalBorderColor(selected);
             selected = btn->property("coords").toPoint();
             setSelectedBorderColor(selected);
             return;
+        } else if (!checkAccess(selected, btn->property("coords").toPoint())){
+            return;
         }
         // propertyState == emptyCell
+        setOriginalBorderColor(selected);
         makeStep(selected, btn->property("coords").toPoint());
         checkEnd();
-        class step botStep = bot->nextStep(fieldToNum()); 
+        class step botStep = bot->nextStep(fieldToNum());
         makeStep(QPoint(botStep.beginPoint.x, botStep.beginPoint.y), QPoint(botStep.endPoint.x, botStep.endPoint.y));
         checkEnd();
     }
@@ -90,11 +93,11 @@ bool Game::checkAccess(QPoint p1, QPoint p2){
 }
 
 void Game::setOriginalBorderColor(QPoint p){
-    field[p.x()][p.y()]->setStyleSheet("border: 2px solid black;");
+    field[p.x()][p.y()]->setStyleSheet("border: 1px solid black;");
 }
 
 void Game::setSelectedBorderColor(QPoint p){
-    field[p.x()][p.y()]->setStyleSheet("border: 2px solid red;");
+    field[p.x()][p.y()]->setStyleSheet("border: 3px solid red;");
 }
 
 void Game::makeStep(QPoint p1, QPoint p2){
@@ -110,7 +113,7 @@ void Game::makeStep(QPoint p1, QPoint p2){
         target = firstPlayerCell;
     }
 
-    if (abs(p1.x() - p2.x()) > cloneSize && abs(p2.x() - p2.y()) > cloneSize){
+    if (abs(p1.x() - p2.x()) > cloneSize || abs(p1.y() - p2.y()) > cloneSize){
         setEmptyCell(p1);
     } else {
         if (target == secondPlayerCell){
@@ -149,21 +152,25 @@ std::vector<std::vector<int>> Game::fieldToNum(){
 
 void Game::setProtectedCell(QPoint p){
     field[p.x()][p.y()]->setIcon(QIcon(protectedCellSprite));
+    field[p.x()][p.y()]->setIconSize(QSize(100, 100));
     field[p.x()][p.y()]->setProperty("state", protectedCell);
 }
 
 void Game::setEmptyCell(QPoint p) {
     field[p.x()][p.y()]->setIcon(QIcon(emptyCellSprite));
+    field[p.x()][p.y()]->setIconSize(QSize(100, 100));
     field[p.x()][p.y()]->setProperty("state", emptyCell);
 }
 
 void Game::setPlayerCell(QPoint p) {
-    field[p.x()][p.y()]->setIcon(QIcon(playerSprite));
+    field[p.x()][p.y()]->setIcon(QIcon(playerCellSprite));
+    field[p.x()][p.y()]->setIconSize(QSize(100, 100));
     field[p.x()][p.y()]->setProperty("state", firstPlayerCell);
 }
 
 void Game::setBotCell(QPoint p){
-    field[p.x()][p.y()]->setIcon(QIcon(botSprite));
+    field[p.x()][p.y()]->setIcon(QIcon(botCellSprite));
+    field[p.x()][p.y()]->setIconSize(QSize(100, 100));
     field[p.x()][p.y()]->setProperty("state", secondPlayerCell);
 }
 

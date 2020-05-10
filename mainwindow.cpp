@@ -12,11 +12,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->showMaximized();
-    QPixmap pix(":src/img/backgound_menu.png");
+    QPixmap pix(":img/background_menu.png");
     pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette pal;
     pal.setBrush(QPalette::Background, pix);
     this->setPalette(pal);
+    QPixmap titlePixmap(":img/title.png");
+    titlePixmap = titlePixmap.scaled(ui->lbl_title->size());
+    ui->lbl_title->setPixmap(titlePixmap);
+    QPixmap mainToadPixmap(":img/toad_main");
+    mainToadPixmap = mainToadPixmap.scaled(ui->lbl_toad_main->size());
+    ui->lbl_toad_main->setPixmap(mainToadPixmap);
 }
 
 MainWindow::~MainWindow()

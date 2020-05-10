@@ -9,19 +9,19 @@ End::End(QWidget *parent) :
 {
     ui->setupUi(this);
     if (gameResult == 1) {
-        QPixmap pix(":src/img/end_win.png");
+        QPixmap pix(":img/end_win.png");
         pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
         QPalette pal;
         pal.setBrush(QPalette::Background, pix);
         this->setPalette(pal);
     } else if (gameResult == -1) {
-        QPixmap pix(":src/img/end_lose.png");
+        QPixmap pix(":img/end_lose.png");
         pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
         QPalette pal;
         pal.setBrush(QPalette::Background, pix);
         this->setPalette(pal);
     } else if (gameResult == 0){
-        QPixmap pix(":src/img/end_draw.png");
+        QPixmap pix(":img/end_draw.png");
         pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
         QPalette pal;
         pal.setBrush(QPalette::Background, pix);

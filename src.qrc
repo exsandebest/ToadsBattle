@@ -1,5 +1,16 @@
 <RCC>
     <qresource prefix="/">
-        <file>img/.empty</file>
+        <file>img/background_menu.png</file>
+        <file>img/cell_empty.png</file>
+        <file>img/cell_player.png</file>
+        <file>img/cell_bot_1.png</file>
+        <file>img/cell_bot_2.png</file>
+        <file>img/cell_bot_3.png</file>
+        <file>img/cell_protected.png</file>
+        <file>img/title.png</file>
+        <file>img/toad_1.png</file>
+        <file>img/toad_2.png</file>
+        <file>img/toad_3.png</file>
+        <file>img/toad_main.png</file>
     </qresource>
 </RCC>
