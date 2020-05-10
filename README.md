@@ -2,6 +2,7 @@
 Simple game about toads with 3 difficulty levels
 ## Features
 * 3 difficulty levels
+* Rules
 ## Rules
 ## Intefrace - examples
 ## Authors
