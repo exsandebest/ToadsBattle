@@ -24,9 +24,15 @@ public:
 	step() {
 		beginPoint = endPoint = point();
 	}
+	
 	step(point A, point B) {
 		beginPoint = A;
 		endPoint = B;
+	}
+	
+	step(int xa, int ya, int xb, int yb) {
+		beginPoint = point(xa, ya);
+		endPoint = point(yb, yb);
 	}
 
     ~step(){};
