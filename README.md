@@ -2,6 +2,8 @@
 Simple game about toads with 3 difficulty levels
 ## Features
 * 3 difficulty levels
+* Rules
+* Amazing swamp design
 ## Rules
 ## Intefrace - examples
 ## Authors
