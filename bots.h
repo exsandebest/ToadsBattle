@@ -21,7 +21,11 @@ public:
 private:
     //constants
     const double POTENTIAL_DANGER_FACTOR = 0.5;
-    const double RANDOM_FACTOR = 0.01;
+    const double POSITION_FACTOR = 0.05;
+    const double MATCH_TIME_FACTOR = 0.2;
+    const double RANDOM_FACTOR_FIRST_BOT = 0.5;
+    const double RANDOM_FACTOR_SECOND_BOT = 0.1;
+    const double RANDOM_FACTOR_THIRD_BOT = 0.01;
     const double INF = 1e18;
     const double EPS_MACHINE = 1e-7;
     //variables
@@ -34,9 +38,10 @@ private:
     std::vector<std::vector<int> > getAfterStepTable(const step& playerStep, const std::vector<std::vector<int> >& table, int queryPlayerNumber);
 
     //characteristic count functions
-    double countPlayerCells(const std::vector<std::vector<int> >& table, int queryPlayerNumber);
-    double countPlayerControl(const std::vector<std::vector<bool> >& controlTable, int queryPlayerNumber);
-    double countPlayerControl(const std::vector<std::vector<int> >& table, int queryPlayerNumber);
+    int countPlayerCells(const std::vector<std::vector<int> >& table, int queryPlayerNumber);
+    int countPlayerControl(const std::vector<std::vector<bool> >& controlTable, int queryPlayerNumber);
+    int countPlayerControl(const std::vector<std::vector<int> >& table, int queryPlayerNumber);
+    double countPartOfNonEmptyCells(const std::vector<std::vector<int> >& table);
 
     //prediction functions
     double firstLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> >& table);

@@ -1,22 +1,30 @@
 #include "bots.h"
 #include <algorithm>
+#include <random>
+
+namespace toadsBattleBotsRandom {
+    static std::random_device randomSeed;
+    static std::mt19937 mersenneRandom(randomSeed());
+}
 
 toadsBattleBots::toadsBattleBots(int tSize, int complexity, int number){
     tableSize = tSize;
     botComplexity = complexity;
     playerNumber = number;
+
     if (complexity == 1)
-        this -> predictionFunction = &toadsBattleBots::firstLevelBotPredictionFunction;
+        predictionFunction = &toadsBattleBots::firstLevelBotPredictionFunction;
     else if (complexity == 2)
-        this -> predictionFunction = &toadsBattleBots::secondLevelBotPredictionFunction;
+        predictionFunction = &toadsBattleBots::secondLevelBotPredictionFunction;
     else
-        this -> predictionFunction = &toadsBattleBots::thirdLevelBotPredictionFunction;
+        predictionFunction = &toadsBattleBots::thirdLevelBotPredictionFunction;
 };
 
 toadsBattleBots::toadsBattleBots(){
     tableSize = 0;
     botComplexity = 1;
     playerNumber = 2;
+    predictionFunction = &toadsBattleBots::firstLevelBotPredictionFunction;
 };
 
 step toadsBattleBots::nextStep(const std::vector<std::vector<int> > &table) {
@@ -26,7 +34,7 @@ step toadsBattleBots::nextStep(const std::vector<std::vector<int> > &table) {
     double bestValue = -INF, tmpValue;
     for (step stepToPredict : steps) {
         tmpValue = (this ->*predictionFunction)(stepToPredict, table);
-        if (tmpValue > bestValue) {
+        if (tmpValue > bestValue + EPS_MACHINE) {
             bestValue = tmpValue;
             queryResult = stepToPredict;
         }
@@ -89,7 +97,7 @@ std::vector<std::vector<int> > toadsBattleBots::getAfterStepTable(const step& pl
     return queryResult;
 }
 
-double toadsBattleBots::countPlayerCells(const std::vector<std::vector<int> > &table, int queryPlayerNumber) {
+int toadsBattleBots::countPlayerCells(const std::vector<std::vector<int> > &table, int queryPlayerNumber) {
     int result = 0;
     for (int i = 0; i < tableSize; ++i) {
         for (int j = 0; j < tableSize; ++j) {
@@ -100,12 +108,12 @@ double toadsBattleBots::countPlayerCells(const std::vector<std::vector<int> > &t
     return result;
 }
 
-inline double  toadsBattleBots::countPlayerControl(const std::vector<std::vector<int> > &table, int queryPlayerNumber) {
+inline int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<int> > &table, int queryPlayerNumber) {
     std::vector<std::vector<bool> > controlTable = getControlTable(table, queryPlayerNumber);
     return countPlayerControl(controlTable, queryPlayerNumber);
 }
 
-double  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> > &controlTable, int queryPlayerNumber) {
+int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> > &controlTable, int queryPlayerNumber) {
     int result = 0;
     for (int i = 0; i < tableSize; ++i) {
         for (int j = 0; j < tableSize; ++j) {
@@ -116,9 +124,23 @@ double  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> 
     return result;
 }
 
+double toadsBattleBots::countPartOfNonEmptyCells(const std::vector<std::vector<int> > &table) {
+    int numberOfNonEmptyCells = tableSize * tableSize);
+    for (int i = 0; i < tableSize; ++i) {
+        for (int j = 0; j < tableSize; ++j) {
+            if (table[i][j] != emptyCell)
+                --numberOfNonEmptyCells;
+        }
+    }
+    return ((double) numberOfNonEmptyCells) / ((double) tableSize) / ((double) tableSize);
+}
+
 //predictions
 double toadsBattleBots::firstLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> > &table) {
-    return 0;
+    int nowCells = countPlayerCells(table, playerNumber),
+    afterStepCells = countPlayerCells(getAfterStepTable(presumableStep, table, playerNumber), playerNumber);
+    return ((double)(afterStepCells - nowCells)) / 8.0 * (1.0 - RANDOM_FACTOR_FIRST_BOT) +
+    RANDOM_FACTOR_FIRST_BOT * std::generate_canonical<double, 10>(toadsBattleBotsRandom::mersenneRandom);
 }
 
 double toadsBattleBots::secondLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> > &table) {
