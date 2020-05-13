@@ -125,7 +125,7 @@ int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> > &
 }
 
 double toadsBattleBots::countPartOfNonEmptyCells(const std::vector<std::vector<int> > &table) {
-    int numberOfNonEmptyCells = tableSize * tableSize);
+    int numberOfNonEmptyCells = (tableSize * tableSize);
     for (int i = 0; i < tableSize; ++i) {
         for (int j = 0; j < tableSize; ++j) {
             if (table[i][j] != emptyCell)
