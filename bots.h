@@ -20,16 +20,18 @@ public:
     step nextStep(const std::vector<std::vector<int> >& table);
 private:
     //constants
-    const double POTENTIAL_DANGER_FACTOR = 0.5;
-    const double POSITION_FACTOR = 0.05;
+    const double POTENTIAL_DANGER_FACTOR = 0.97;
+    const double POSITION_FACTOR_SECOND_BOT = 0.2;
+    const double POSITION_FACTOR_THIRD_BOT = 0.02;
     const double MATCH_TIME_FACTOR = 0.2;
     const double RANDOM_FACTOR_FIRST_BOT = 0.5;
     const double RANDOM_FACTOR_SECOND_BOT = 0.1;
     const double RANDOM_FACTOR_THIRD_BOT = 0.01;
     const double INF = 1e18;
     const double EPS_MACHINE = 1e-7;
+   
     //variables
-    int tableSize, botComplexity, playerNumber;
+    int tableSize, botComplexity, playerNumber, analysisDepth;
     double (toadsBattleBots::*predictionFunction)(const step&, const  std::vector<std::vector<int> >&);
 
     //get functions
@@ -39,9 +41,13 @@ private:
 
     //characteristic count functions
     int countPlayerCells(const std::vector<std::vector<int> >& table, int queryPlayerNumber);
-    int countPlayerControl(const std::vector<std::vector<bool> >& controlTable, int queryPlayerNumber);
+    int countPlayerControl(const std::vector<std::vector<bool> >& controlTable);
     int countPlayerControl(const std::vector<std::vector<int> >& table, int queryPlayerNumber);
     double countPartOfNonEmptyCells(const std::vector<std::vector<int> >& table);
+    double countPositionFactor(const int x, const int y);
+    
+    //deep
+    double deepAnalysis(const step& presumableStep, const std::vector<std::vector<int> >& table, const int depth, const int playerNum);
 
     //prediction functions
     double firstLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> >& table);

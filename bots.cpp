@@ -9,7 +9,7 @@ namespace toadsBattleBotsRandom {
 
 toadsBattleBots::toadsBattleBots(int tSize, int complexity, int number){
     tableSize = tSize;
-    botComplexity = complexity;
+    analysisDepth = 2 * (complexity - 1);
     playerNumber = number;
 
     if (complexity == 1)
@@ -22,7 +22,7 @@ toadsBattleBots::toadsBattleBots(int tSize, int complexity, int number){
 
 toadsBattleBots::toadsBattleBots(){
     tableSize = 0;
-    botComplexity = 1;
+    analysisDepth = 0;
     playerNumber = 2;
     predictionFunction = &toadsBattleBots::firstLevelBotPredictionFunction;
 };
@@ -33,7 +33,7 @@ step toadsBattleBots::nextStep(const std::vector<std::vector<int> > &table) {
     step queryResult = step(-1, -1, -1, -1);
     double bestValue = -INF, tmpValue;
     for (step stepToPredict : steps) {
-        tmpValue = (this ->*predictionFunction)(stepToPredict, table);
+        tmpValue = deepAnalysis(stepToPredict, table, analysisDepth, playerNumber);
         if (tmpValue > bestValue + EPS_MACHINE) {
             bestValue = tmpValue;
             queryResult = stepToPredict;
@@ -82,7 +82,7 @@ std::vector<step> toadsBattleBots::getStepsPool(const std::vector<std::vector<in
 
 std::vector<std::vector<int> > toadsBattleBots::getAfterStepTable(const step& playerStep, const std::vector<std::vector<int> >& table, const int queryPlayerNumber) {
     std::vector<std::vector<int> > queryResult  = table;
-    int enemyPlayerNumber = (queryPlayerNumber + 1) % 2;
+    int enemyPlayerNumber = queryPlayerNumber % 2 + 1;
     if (std::max(std::abs(playerStep.beginPoint.x - playerStep.endPoint.x), std::abs(playerStep.beginPoint.y - playerStep.endPoint.y)) == 2)
         queryResult[playerStep.beginPoint.x][playerStep.beginPoint.y] = emptyCell;
     queryResult[playerStep.endPoint.x][playerStep.endPoint.y] = queryPlayerNumber;
@@ -110,10 +110,10 @@ int toadsBattleBots::countPlayerCells(const std::vector<std::vector<int> > &tabl
 
 inline int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<int> > &table, int queryPlayerNumber) {
     std::vector<std::vector<bool> > controlTable = getControlTable(table, queryPlayerNumber);
-    return countPlayerControl(controlTable, queryPlayerNumber);
+    return countPlayerControl(controlTable);
 }
 
-int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> > &controlTable, int queryPlayerNumber) {
+int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> > &controlTable) {
     int result = 0;
     for (int i = 0; i < tableSize; ++i) {
         for (int j = 0; j < tableSize; ++j) {
@@ -125,7 +125,7 @@ int  toadsBattleBots::countPlayerControl(const std::vector<std::vector<bool> > &
 }
 
 double toadsBattleBots::countPartOfNonEmptyCells(const std::vector<std::vector<int> > &table) {
-    int numberOfNonEmptyCells = (tableSize * tableSize);
+    int numberOfNonEmptyCells = tableSize * tableSize;
     for (int i = 0; i < tableSize; ++i) {
         for (int j = 0; j < tableSize; ++j) {
             if (table[i][j] != emptyCell)
@@ -135,18 +135,70 @@ double toadsBattleBots::countPartOfNonEmptyCells(const std::vector<std::vector<i
     return ((double) numberOfNonEmptyCells) / ((double) tableSize) / ((double) tableSize);
 }
 
+double toadsBattleBots::countPositionFactor(const int x, const int y) {
+    return ((double) std::min(x, tableSize - x - 1)) * ((double) std::min(y, tableSize - y - 1)) / (((double) tableSize) / 2.0) * (((double) tableSize) / 2.0);
+}
+
+double toadsBattleBots::deepAnalysis(const step &presumableStep, const std::vector<std::vector<int> > &table, const int depth, const int playerNum) {
+    if (depth == 0)
+        return (this ->*predictionFunction)(presumableStep, table);
+    std::vector<std::vector<int> > tableAfterStep = getAfterStepTable(presumableStep, table, playerNum);
+
+    std::vector<step> pool = getStepsPool(table, playerNum % 2 + 1);
+
+    if (pool.empty()) {
+        if (countPlayerCells(tableAfterStep, playerNumber) > countPlayerCells(tableAfterStep, playerNumber % 2 + 1))
+            return 1.0;
+        else if (countPlayerCells(tableAfterStep, playerNumber) == countPlayerCells(tableAfterStep, playerNumber % 2 + 1))
+            return 0.5;
+        else
+            return 0.0;
+    }
+
+    double medValue = 0.0;
+
+    for (step& stepNow : pool) {
+        medValue += deepAnalysis(stepNow, tableAfterStep, depth - 1, playerNum % 2 + 1);
+    }
+    return medValue / ((double) pool.size());
+}
+
 //predictions
 double toadsBattleBots::firstLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> > &table) {
-    int nowCells = countPlayerCells(table, playerNumber),
-    afterStepCells = countPlayerCells(getAfterStepTable(presumableStep, table, playerNumber), playerNumber);
-    return ((double)(afterStepCells - nowCells)) / 8.0 * (1.0 - RANDOM_FACTOR_FIRST_BOT) +
+    int afterStepCells = countPlayerCells(getAfterStepTable(presumableStep, table, playerNumber), playerNumber);
+
+    return ((double)afterStepCells) * (1.0 - RANDOM_FACTOR_FIRST_BOT) +
     RANDOM_FACTOR_FIRST_BOT * std::generate_canonical<double, 10>(toadsBattleBotsRandom::mersenneRandom);
 }
 
 double toadsBattleBots::secondLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> > &table) {
-    return 0;
+    std::vector<std::vector<int> > updatedTable = getAfterStepTable(presumableStep, table, playerNumber);
+    int afterStepCells = countPlayerCells(updatedTable, playerNumber),
+        afterStepEnemyCells = countPlayerCells(updatedTable, playerNumber % 2 + 1);
+    double positionF = countPositionFactor(presumableStep.endPoint.x, presumableStep.endPoint.y);
+
+
+    return RANDOM_FACTOR_SECOND_BOT * std::generate_canonical<double, 10>(toadsBattleBotsRandom::mersenneRandom) +
+            positionF * POSITION_FACTOR_SECOND_BOT +
+            ((double)(afterStepCells - afterStepEnemyCells)) / 6.0 * (1.0 - POSITION_FACTOR_SECOND_BOT - RANDOM_FACTOR_SECOND_BOT);
 }
 
 double toadsBattleBots::thirdLevelBotPredictionFunction(const step& presumableStep, const std::vector<std::vector<int> > &table) {
-    return 0;
+    std::vector<std::vector<int> > updatedTable = getAfterStepTable(presumableStep, table, playerNumber);
+    std::vector<std::vector<bool> > updatedControlTable = getControlTable(updatedTable, playerNumber),
+                                    updatedEnemyControlTable = getControlTable(updatedTable, playerNumber % 2 + 1);
+
+    int afterStepCells = countPlayerCells(updatedTable, playerNumber),
+            afterStepEnemyCells = countPlayerCells(updatedTable, playerNumber % 2 + 1),
+            afterStepControl = countPlayerControl(updatedControlTable),
+            afterStepEnemyControl = countPlayerControl(updatedEnemyControlTable);
+    double positionF = countPositionFactor(presumableStep.endPoint.x, presumableStep.endPoint.y),
+           nonEmpty = countPartOfNonEmptyCells(updatedTable),
+           dangerFactor = (updatedEnemyControlTable[presumableStep.endPoint.x][presumableStep.endPoint.y]) ? POTENTIAL_DANGER_FACTOR : 1.0;
+
+
+    return (RANDOM_FACTOR_THIRD_BOT * std::generate_canonical<double, 10>(toadsBattleBotsRandom::mersenneRandom) +
+           POSITION_FACTOR_THIRD_BOT * positionF +
+           (1.0 - RANDOM_FACTOR_THIRD_BOT - POSITION_FACTOR_THIRD_BOT) * ((1.0 - nonEmpty) * (afterStepControl - afterStepEnemyControl) +
+                                                                           nonEmpty * (afterStepCells - afterStepEnemyCells))) * dangerFactor;
 }
