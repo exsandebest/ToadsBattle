@@ -132,9 +132,11 @@ void Game::makeStep(QPoint p1, QPoint p2){
                 if (target == firstPlayerCell){
                     setBotCell(QPoint(i, j));
                     ++botScore;
+                    --playerScore;
                 } else {
                     setPlayerCell(QPoint(i, j));
                     ++playerScore;
+                    --botScore;
                 }
             }
         }
