@@ -32,7 +32,7 @@ public:
 	
 	step(int xa, int ya, int xb, int yb) {
 		beginPoint = point(xa, ya);
-		endPoint = point(yb, yb);
+		endPoint = point(xb, yb);
 	}
 
     ~step(){};
