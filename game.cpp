@@ -6,14 +6,17 @@
 #include <QPushButton>
 #include "end.h"
 #include <QPropertyAnimation>
+#include <QDebug>
 
 extern int botLevel;
+
+const bool debug = false;
 
 const int fieldSize = 8;
 const int stepSize = 2;
 const int cloneSize = 1;
 const int grabSize = 1;
-const int animationDuration = 200;
+const int animationDuration = 150;
 const QString playerCellSprite = ":img/cell_player.png";
 const QString emptyCellSprite = ":img/cell_empty.png";
 const QString protectedCellSprite = ":img/sprite_protected_cell.png";
@@ -44,9 +47,10 @@ Game::Game(QWidget *parent) :
             btn->setProperty("coords", QPoint(i, j));
             btn->setObjectName("btnGame");
             btn->setIconSize(QSize(100, 100));
+            btn->setIcon(QIcon(emptyCellSprite));
+            btn->setProperty("state", emptyCell);
             QObject :: connect(btn, SIGNAL(clicked()), this, SLOT(btnGameClicked()));
             field[i][j] = btn;
-            setEmptyCell(QPoint(i, j));
             setOriginalBorderColor(QPoint(i, j));
             ui->layout_game->addWidget(btn, i,j);
         }
@@ -106,34 +110,42 @@ void Game::setSelectedBorderColor(QPoint p){
 void Game::makeStep(QPoint p1, QPoint p2){
     QPushButton * btn1 = field[p1.x()][p1.y()];
     QPushButton * btn2 = field[p2.x()][p2.y()];
-    btn2->setProperty("state", btn1->property("state"));
+    int me = btn1->property("state").toInt();
     int target;
-    if (btn1->property("state").toInt() == firstPlayerCell){
-        setPlayerCell(p2);
+    if (me == firstPlayerCell){
         target = secondPlayerCell;
     } else {
-        setBotCell(p2);
         target = firstPlayerCell;
     }
-
     if (abs(p1.x() - p2.x()) > cloneSize || abs(p1.y() - p2.y()) > cloneSize){
         setEmptyCell(p1);
     } else {
-        if (target == secondPlayerCell){
+        if (me == firstPlayerCell){
             ++playerScore;
         } else {
             ++botScore;
         }
     }
-
+    btn2->setProperty("state", me);
+    if (me == firstPlayerCell){
+        if (debug) qDebug() << "Player step:" << p1 << p2;
+        setPlayerCell(p2);
+        target = secondPlayerCell;
+    } else {
+        if (debug) qDebug() << "Bot step:" << p1 << p2;
+        setBotCell(p2);
+        target = firstPlayerCell;
+    }
     for (int i = qMax(0, p2.x() - grabSize); i <= qMin(fieldSize - 1, p2.x() + grabSize); ++i){
         for (int j = qMax(0, p2.y() - grabSize); j <= qMin(fieldSize - 1, p2.y() + grabSize); ++j){
             if (field[i][j]->property("state").toInt() == target){
                 if (target == firstPlayerCell){
+                    if (debug) qDebug() << "Transformation : Player -> Bot : " << QPoint(i, j);
                     setBotCell(QPoint(i, j));
                     ++botScore;
                     --playerScore;
                 } else {
+                    if (debug) qDebug() << "Transformation : Bot -> Player : " << QPoint(i, j);
                     setPlayerCell(QPoint(i, j));
                     ++playerScore;
                     --botScore;
@@ -155,27 +167,50 @@ std::vector<std::vector<int>> Game::fieldToNum(){
     return v;
 }
 
+void Game::btnAnimation(QPushButton * btn, int type){
+    QPropertyAnimation * animation = new QPropertyAnimation(btn, "iconSize");
+    animation->setDuration(animationDuration);
+    if (type == 1){
+        animation->setStartValue(QSize(100, 100));
+        animation->setEndValue(QSize(50, 50));
+    } else if (type == 2) {
+        animation->setStartValue(QSize(50, 50));
+        animation->setEndValue(QSize(100, 100));
+    }
+    animation->start();
+    while (animation->state() != QAbstractAnimation::Stopped) QCoreApplication::processEvents();
+    delete animation;
+}
+
 void Game::setProtectedCell(QPoint p){
     QPushButton * btn = field[p.x()][p.y()];
+    btnAnimation(btn, 1);
     btn->setIcon(QIcon(protectedCellSprite));
+    btnAnimation(btn, 2);
     btn->setProperty("state", protectedCell);
 }
 
 void Game::setEmptyCell(QPoint p) {
     QPushButton * btn = field[p.x()][p.y()];
+    btnAnimation(btn, 1);
     btn->setIcon(QIcon(emptyCellSprite));
+    btnAnimation(btn, 2);
     btn->setProperty("state", emptyCell);
 }
 
 void Game::setPlayerCell(QPoint p) {
     QPushButton * btn = field[p.x()][p.y()];
+    btnAnimation(btn, 1);
     btn->setIcon(QIcon(playerCellSprite));
+    btnAnimation(btn, 2);
     btn->setProperty("state", firstPlayerCell);
 }
 
 void Game::setBotCell(QPoint p){
     QPushButton * btn = field[p.x()][p.y()];
+    btnAnimation(btn, 1);
     btn->setIcon(QIcon(botCellSprite));
+    btnAnimation(btn, 2);
     btn->setProperty("state", secondPlayerCell);
 }
 
