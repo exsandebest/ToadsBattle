@@ -27,6 +27,7 @@ public:
     void setProtectedCell(QPoint);
     void checkEnd();
     void btnAnimation(QPushButton *, int);
+    void updateScore(int, int);
 
 private slots:
     void btnGameClicked();

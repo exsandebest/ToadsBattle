@@ -39,6 +39,8 @@ Game::Game(QWidget *parent) :
     ui->setupUi(this);
     this->showMaximized();
     botCellSprite = ":img/cell_bot_" + QString::number(botLevel) + ".png";
+    ui->lbl_player->setPixmap(QPixmap(":img/toad_main.png").scaled(ui->lbl_player->size(), Qt::KeepAspectRatio));
+    ui->lbl_bot->setPixmap(QPixmap(":img/toad_" + QString::number(botLevel) + ".png").scaled(ui->lbl_bot->size(), Qt::KeepAspectRatio));
     for (int i = 0; i < fieldSize; ++i){
         for (int j = 0; j < fieldSize; ++j){
             QPushButton * btn = new QPushButton();
@@ -121,9 +123,9 @@ void Game::makeStep(QPoint p1, QPoint p2){
         setEmptyCell(p1);
     } else {
         if (me == firstPlayerCell){
-            ++playerScore;
+            updateScore(1, 1);
         } else {
-            ++botScore;
+            updateScore(2, 1);
         }
     }
     btn2->setProperty("state", me);
@@ -142,13 +144,13 @@ void Game::makeStep(QPoint p1, QPoint p2){
                 if (target == firstPlayerCell){
                     if (debug) qDebug() << "Transformation : Player -> Bot : " << QPoint(i, j);
                     setBotCell(QPoint(i, j));
-                    ++botScore;
-                    --playerScore;
+                    updateScore(2, 1);
+                    updateScore(1, -1);
                 } else {
                     if (debug) qDebug() << "Transformation : Bot -> Player : " << QPoint(i, j);
                     setPlayerCell(QPoint(i, j));
-                    ++playerScore;
-                    --botScore;
+                    updateScore(1, 1);
+                    updateScore(2, -1);
                 }
             }
         }
@@ -165,6 +167,16 @@ std::vector<std::vector<int>> Game::fieldToNum(){
         v.push_back(t);
     }
     return v;
+}
+
+void Game::updateScore(int player, int k){
+    if (player == 1){
+        playerScore += k;
+        ui->lbl_playerScore->setText(QString::number(playerScore));
+    } else if (player == 2){
+        botScore += k;
+        ui->lbl_botScore->setText(QString::number(botScore));
+    }
 }
 
 void Game::btnAnimation(QPushButton * btn, int type){

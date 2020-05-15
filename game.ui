@@ -33,6 +33,80 @@
     </property>
     <layout class="QGridLayout" name="layout_game"/>
    </widget>
+   <widget class="QLabel" name="lbl_playerScore">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>840</y>
+      <width>211</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>50</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>2</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_botScore">
+    <property name="geometry">
+     <rect>
+      <x>1410</x>
+      <y>80</y>
+      <width>211</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>50</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>2</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_bot">
+    <property name="geometry">
+     <rect>
+      <x>1400</x>
+      <y>150</y>
+      <width>220</width>
+      <height>180</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_player">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>660</y>
+      <width>220</width>
+      <height>180</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
