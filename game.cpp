@@ -25,8 +25,8 @@ const QString protectedCellSprite = ":img/sprite_protected_cell.png";
 QString botCellSprite = "";
 toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
 
-int playerScore = 2;
-int botScore = 2;
+int playerScore = 0;
+int botScore = 0;
 int selectionState = 0;
 int gameResult = 0;
 QPoint selected;
@@ -40,6 +40,10 @@ Game::Game(QWidget *parent) :
 {
     ui->setupUi(this);
     this->showMaximized();
+    gameResult = 0;
+    playerScore = 0;
+    botScore = 0;
+    selectionState = 0;
     botCellSprite = ":img/cell_bot_" + QString::number(botLevel) + ".png";
     ui->lbl_player->setPixmap(QPixmap(":img/toad_main.png").scaled(ui->lbl_player->size(), Qt::KeepAspectRatio));
     ui->lbl_bot->setPixmap(QPixmap(":img/toad_" + QString::number(botLevel) + ".png").scaled(ui->lbl_bot->size(), Qt::KeepAspectRatio));
@@ -60,9 +64,13 @@ Game::Game(QWidget *parent) :
         }
     }
     setPlayerCell(QPoint(0, 0));
+    updateScore(1, 1);
     setPlayerCell(QPoint(fieldSize - 1, 0));
+    updateScore(1, 1);
     setBotCell(QPoint(0, fieldSize - 1));
+    updateScore(2, 1);
     setBotCell(QPoint(fieldSize - 1, fieldSize - 1));
+    updateScore(2, 1);
 }
 
 Game::~Game()
