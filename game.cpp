@@ -69,6 +69,7 @@ Game::~Game()
 }
 
 void Game::btnGameClicked(){
+    if (selectionState == -1) return;
     QObject * btn = sender();
     int propertyState = btn->property("state").toInt();
     if (selectionState == 0){
@@ -88,12 +89,14 @@ void Game::btnGameClicked(){
             return;
         }
         // propertyState == emptyCell
+        selectionState = -1;
         setOriginalBorderColor(selected);
         makeStep(selected, btn->property("coords").toPoint());
         checkEnd();
         class step botStep = bot->nextStep(fieldToNum());
         makeStep(QPoint(botStep.beginPoint.x, botStep.beginPoint.y), QPoint(botStep.endPoint.x, botStep.endPoint.y));
         checkEnd();
+        selectionState = 0;
     }
 }
 
