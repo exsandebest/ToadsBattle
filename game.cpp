@@ -7,6 +7,7 @@
 #include "end.h"
 #include <QPropertyAnimation>
 #include <QDebug>
+#include <QThread>
 
 extern int botLevel;
 
@@ -17,6 +18,7 @@ const int stepSize = 2;
 const int cloneSize = 1;
 const int grabSize = 1;
 const int animationDuration = 150;
+const int standardDelay = 600;
 const QString playerCellSprite = ":img/cell_player.png";
 const QString emptyCellSprite = ":img/cell_empty.png";
 const QString protectedCellSprite = ":img/sprite_protected_cell.png";
@@ -93,9 +95,17 @@ void Game::btnGameClicked(){
         setOriginalBorderColor(selected);
         makeStep(selected, btn->property("coords").toPoint());
         checkEnd();
+        QApplication::processEvents();
+        QThread::msleep(standardDelay / botLevel);
         class step botStep = bot->nextStep(fieldToNum());
+        setSelectedBorderColor(QPoint(botStep.beginPoint.x, botStep.beginPoint.y));
+        QApplication::processEvents();
+        QThread::msleep(standardDelay / botLevel);
+        setOriginalBorderColor(QPoint(botStep.beginPoint.x, botStep.beginPoint.y));
+        QApplication::processEvents();
         makeStep(QPoint(botStep.beginPoint.x, botStep.beginPoint.y), QPoint(botStep.endPoint.x, botStep.endPoint.y));
         checkEnd();
+        QApplication::processEvents();
         selectionState = 0;
     }
 }
