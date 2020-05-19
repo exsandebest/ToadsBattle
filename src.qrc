@@ -12,5 +12,6 @@
         <file>img/toad_2.png</file>
         <file>img/toad_3.png</file>
         <file>img/toad_main.png</file>
+        <file>img/icon.ico</file>
     </qresource>
 </RCC>

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Rules</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="src.qrc">
+    <normaloff>:/img/icon.ico</normaloff>:/img/icon.ico</iconset>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -49,6 +53,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="src.qrc"/>
+ </resources>
  <connections/>
 </ui>

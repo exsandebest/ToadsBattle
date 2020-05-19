@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Toads Battle</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="src.qrc">
+    <normaloff>:/img/icon.ico</normaloff>:/img/icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="btn_startGame">
     <property name="geometry">
@@ -81,6 +85,8 @@
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="src.qrc"/>
+ </resources>
  <connections/>
 </ui>
