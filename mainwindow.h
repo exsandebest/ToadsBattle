@@ -18,8 +18,6 @@ public:
 private slots:
     void on_btn_level_clicked();
 
-    void on_btn_rules_clicked();
-
     void on_btn_startGame_clicked();
 
 private:

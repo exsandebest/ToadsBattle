@@ -20,22 +20,19 @@ SOURCES += \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
-    rules.cpp \
     bots.cpp
 
 HEADERS += \
     end.h \
     game.h \
     mainwindow.h \
-    rules.h \
     bots.h \
     basicstructures.h
 
 FORMS += \
     end.ui \
     game.ui \
-    mainwindow.ui \
-    rules.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

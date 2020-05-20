@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "rules.h"
 #include "game.h"
 
 int botLevel = 1;
@@ -46,11 +45,6 @@ void MainWindow::on_btn_level_clicked()
     }
 }
 
-void MainWindow::on_btn_rules_clicked()
-{
-    Rules rulesWindow;
-    rulesWindow.exec();
-}
 
 void MainWindow::on_btn_startGame_clicked()
 {
