@@ -15,6 +15,9 @@ public:
     explicit End(QWidget *parent = nullptr);
     ~End();
 
+signals:
+    void end();
+
 private slots:
     void on_btn_ok_clicked();
 

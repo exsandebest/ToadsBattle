@@ -32,6 +32,8 @@ public:
 private slots:
     void btnGameClicked();
 
+    void on_btn_skip_clicked();
+
 private:
     Ui::Game *ui;
 };

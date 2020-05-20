@@ -38,4 +38,6 @@ End::~End()
 void End::on_btn_ok_clicked()
 {
     this->close();
+    emit end();
 }
+

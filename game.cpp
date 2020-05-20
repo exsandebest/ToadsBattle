@@ -17,8 +17,9 @@ const int fieldSize = 8;
 const int stepSize = 2;
 const int cloneSize = 1;
 const int grabSize = 1;
-const int animationDuration = 150;
-const int standardDelay = 600;
+const int animationDuration = 150; //ms
+const int standardDelay = 600; //ms
+const int dialogTimeout = 7; //s
 const QString playerCellSprite = ":img/cell_player.png";
 const QString emptyCellSprite = ":img/cell_empty.png";
 const QString protectedCellSprite = ":img/sprite_protected_cell.png";
@@ -29,6 +30,7 @@ int playerScore = 0;
 int botScore = 0;
 int selectionState = 0;
 int gameResult = 0;
+bool skipClicked = false;
 QPoint selected;
 
 QPushButton * field[fieldSize][fieldSize];
@@ -41,6 +43,11 @@ Game::Game(QWidget *parent) :
     ui->setupUi(this);
 
     this->showMaximized();
+    QApplication::processEvents();
+    this->setFixedSize(this->size());
+
+    skipClicked = false;
+    ui->btn_skip->show();
 
     QApplication::processEvents();
     QPixmap pix(":img/dialog_" + QString::number(botLevel) +".png");
@@ -49,10 +56,13 @@ Game::Game(QWidget *parent) :
     pal.setBrush(QPalette::Background, pix);
     this->setPalette(pal);
     QApplication::processEvents();
-    for (int i = 0; i < 2 * 5; ++i){
-        QThread::msleep(500);
+    for (int i = 0; i < 20 * dialogTimeout; ++i){
+        if (skipClicked) break;
+        QThread::msleep(50);
         QApplication::processEvents();
     }
+
+    ui->btn_skip->hide();
 
     QPixmap pix2(":img/background_game.png");
     pix2 = pix2.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -282,7 +292,12 @@ void Game::checkEnd(){
     } else if (playerScore == botScore){
         gameResult = 0;
     }
-    End endWindow;
-    endWindow.exec();
-    this->close();
+    End * endWindow = new End(this);
+    QObject::connect(endWindow, &End::end, this, &Game::close);
+    endWindow->open();
+
+}
+
+void Game::on_btn_skip_clicked(){
+    skipClicked = true;
 }

@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->showMaximized();
+    QApplication::processEvents();
+    this->setFixedSize(this->size());
     QPixmap pix(":img/background_menu.png");
     pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette pal;
@@ -52,8 +54,11 @@ void MainWindow::on_btn_rules_clicked()
 
 void MainWindow::on_btn_startGame_clicked()
 {
-    this->hide();
-    Game gameWindow;
-    gameWindow.exec();
-    this->show();
+    this->setVisible(false);
+
+    Game * gameWindow = new Game(this);
+    gameWindow->open();
+    QApplication::processEvents();
+
+    this->setVisible(true);
 }
