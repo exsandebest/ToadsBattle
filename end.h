@@ -18,6 +18,9 @@ public:
 signals:
     void end();
 
+protected:
+    void closeEvent(QCloseEvent *) override;
+
 private slots:
     void on_btn_ok_clicked();
 

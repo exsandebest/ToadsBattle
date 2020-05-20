@@ -1,5 +1,6 @@
 #include "end.h"
 #include "ui_end.h"
+#include <QCloseEvent>
 
 extern int gameResult;
 
@@ -39,5 +40,10 @@ void End::on_btn_ok_clicked()
 {
     this->close();
     emit end();
+}
+
+void End::closeEvent(QCloseEvent * e) {
+    emit end();
+    e->accept();
 }
 
