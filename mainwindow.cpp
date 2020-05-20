@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "rules.h"
-#include "dialog.h"
 #include "game.h"
 
 int botLevel = 1;
@@ -54,8 +53,6 @@ void MainWindow::on_btn_rules_clicked()
 void MainWindow::on_btn_startGame_clicked()
 {
     this->hide();
-    Dialog dialogWindow;
-    dialogWindow.exec();
     Game gameWindow;
     gameWindow.exec();
     this->show();

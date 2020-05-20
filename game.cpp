@@ -39,7 +39,27 @@ Game::Game(QWidget *parent) :
     ui(new Ui::Game)
 {
     ui->setupUi(this);
+
     this->showMaximized();
+
+    QApplication::processEvents();
+    QPixmap pix(":img/dialog_" + QString::number(botLevel) +".png");
+    pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette pal;
+    pal.setBrush(QPalette::Background, pix);
+    this->setPalette(pal);
+    QApplication::processEvents();
+    for (int i = 0; i < 2 * 5; ++i){
+        QThread::msleep(500);
+        QApplication::processEvents();
+    }
+
+    QPixmap pix2(":img/background_game.png");
+    pix2 = pix2.scaled(this->size(), Qt::IgnoreAspectRatio);
+    pal.setBrush(QPalette::Background, pix2);
+    this->setPalette(pal);
+    QApplication::processEvents();
+
     gameResult = 0;
     playerScore = 0;
     botScore = 0;

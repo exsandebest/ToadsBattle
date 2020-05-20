@@ -13,5 +13,8 @@
         <file>img/toad_3.png</file>
         <file>img/toad_main.png</file>
         <file>img/icon.ico</file>
+        <file>img/dialog_1.png</file>
+        <file>img/dialog_2.png</file>
+        <file>img/dialog_3.png</file>
     </qresource>
 </RCC>
