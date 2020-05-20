@@ -70,6 +70,9 @@ Game::Game(QWidget *parent) :
     this->setPalette(pal);
     QApplication::processEvents();
 
+    ui->lbl_playerScore->setStyleSheet("color : white;");
+    ui->lbl_botScore->setStyleSheet("color : white;");
+
     gameResult = 0;
     playerScore = 0;
     botScore = 0;

@@ -16,5 +16,6 @@
         <file>img/dialog_1.png</file>
         <file>img/dialog_2.png</file>
         <file>img/dialog_3.png</file>
+        <file>img/background_game.png</file>
     </qresource>
 </RCC>
