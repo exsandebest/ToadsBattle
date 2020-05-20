@@ -24,7 +24,6 @@ public:
     void setEmptyCell(QPoint);
     void setPlayerCell(QPoint);
     void setBotCell(QPoint);
-    void setProtectedCell(QPoint);
     void checkEnd();
     void btnAnimation(QPushButton *, int);
     void updateScore(int, int);
