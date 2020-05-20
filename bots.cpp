@@ -136,7 +136,7 @@ double toadsBattleBots::countPartOfNonEmptyCells(const std::vector<std::vector<i
 }
 
 double toadsBattleBots::countPositionFactor(const int x, const int y) {
-    return ((double) std::min(x, tableSize - x - 1)) * ((double) std::min(y, tableSize - y - 1)) / (((double) tableSize) / 2.0) * (((double) tableSize) / 2.0);
+    return (((double) std::min(x, tableSize - x - 1)) / (((double) tableSize) / 2.0) + ((double) std::min(y, tableSize - y - 1)) / (((double) tableSize) / 2.0)) / 2.0;
 }
 
 double toadsBattleBots::deepAnalysis(const step &presumableStep, const std::vector<std::vector<int> > &table, const int depth, const int playerNum) {
