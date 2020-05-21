@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include <QDialog>
-#include <basicstructures.h>
 #include <vector>
 
 namespace Ui {
@@ -25,7 +24,7 @@ public:
     void setPlayerCell(QPoint);
     void setBotCell(QPoint);
     void checkEnd();
-    void btnAnimation(QPushButton *, int);
+    void changeIcon(QPushButton *, QIcon);
     void updateScore(int, int);
 
 private slots:
