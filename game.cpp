@@ -135,7 +135,7 @@ void Game::btnGameClicked(){
         selectionState = -1;
         setOriginalBorderColor(selected);
         makeStep(selected, btn->property("coords").toPoint());
-        checkEnd();
+        if (checkEnd()) return;
         QApplication::processEvents();
         QThread::msleep(standardDelay / botLevel);
         class step botStep = bot->nextStep(fieldToNum());
@@ -145,9 +145,9 @@ void Game::btnGameClicked(){
         setOriginalBorderColor(QPoint(botStep.beginPoint.x, botStep.beginPoint.y));
         QApplication::processEvents();
         makeStep(QPoint(botStep.beginPoint.x, botStep.beginPoint.y), QPoint(botStep.endPoint.x, botStep.endPoint.y));
-        checkEnd();
         QApplication::processEvents();
         selectionState = 0;
+        checkEnd();
     }
 }
 
@@ -272,11 +272,11 @@ void Game::setProtectedCell(QPoint p){
     btn->setProperty("state", protectedCell);
 }
 
-void Game::checkEnd(){
+bool Game::checkEnd(){
     if (playerScore == 0 || botScore == 0) goto out;
     for (int i = 0; i < fieldSize; ++i){
         for (int j = 0; j < fieldSize; ++j){
-            if (field[i][j]->property("state").toInt() == emptyCell) return;
+            if (field[i][j]->property("state").toInt() == emptyCell) return false;
         }
     }
     out:;
@@ -291,6 +291,7 @@ void Game::checkEnd(){
     End * endWindow = new End(this);
     QObject::connect(endWindow, &End::end, this, &Game::close);
     endWindow->open();
+    return true;
 }
 
 void Game::on_btn_skip_clicked(){
