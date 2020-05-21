@@ -286,10 +286,10 @@ void Game::checkEnd(){
     } else if (playerScore == botScore){
         gameResult = 0;
     }
+    QApplication::processEvents();
     End * endWindow = new End(this);
     QObject::connect(endWindow, &End::end, this, &Game::close);
     endWindow->open();
-
 }
 
 void Game::on_btn_skip_clicked(){

@@ -9,6 +9,7 @@ End::End(QWidget *parent) :
     ui(new Ui::End)
 {
     ui->setupUi(this);
+    QApplication::processEvents();
     if (gameResult == 1) {
         QPixmap pix(":img/end_win.png");
         pix = pix.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -28,7 +29,7 @@ End::End(QWidget *parent) :
         pal.setBrush(QPalette::Background, pix);
         this->setPalette(pal);
     }
-
+    QApplication::processEvents();
 }
 
 End::~End()
