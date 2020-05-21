@@ -1,6 +1,6 @@
 <p align="center"><a href="https://raw.githubusercontent.com/exsandebest/ToadsBattle/master/img/original_icon.png"><img src="https://raw.githubusercontent.com/exsandebest/ToadsBattle/master/img/original_icon.png" height=128 width=128/></a></p>
 <h1 align="center">Toads Battle</h1>
-<span align="center"><b>Simple game about toads with 3 difficulty levels</b></span>
+<p align="center">Simple game about toads with 3 difficulty levels</p>
 
 ## Features
 * 3 difficulty levels
