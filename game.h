@@ -23,6 +23,7 @@ public:
     void setEmptyCell(QPoint);
     void setPlayerCell(QPoint);
     void setBotCell(QPoint);
+    void setProtectedCell(QPoint);
     void checkEnd();
     void changeIcon(QPushButton *, QIcon);
     void updateScore(int, int);

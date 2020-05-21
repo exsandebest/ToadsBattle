@@ -22,6 +22,7 @@ const int standardDelay = 600; //ms
 const int dialogTimeout = 7; //s
 const QString playerCellSprite = ":img/cell_player.png";
 const QString emptyCellSprite = ":img/cell_empty.png";
+const QString protectedCellSprite = ":img/cell_protected.png";
 QString botCellSprite = "";
 toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
 
@@ -115,12 +116,12 @@ void Game::btnGameClicked(){
     QObject * btn = sender();
     int propertyState = btn->property("state").toInt();
     if (selectionState == 0){
-        if (propertyState == emptyCell || propertyState == secondPlayerCell) return;
+        if (propertyState == emptyCell || propertyState == secondPlayerCell || propertyState == protectedCell) return;
         selectionState = 1;
         selected = btn->property("coords").toPoint();
         setSelectedBorderColor(selected);
     } else if (selectionState == 1) {
-        if (propertyState == secondPlayerCell) {
+        if (propertyState == protectedCell || propertyState == secondPlayerCell) {
             return;
         } else if (propertyState == firstPlayerCell){
             setOriginalBorderColor(selected);
@@ -263,6 +264,12 @@ void Game::setBotCell(QPoint p){
     QPushButton * btn = field[p.x()][p.y()];
     changeIcon(btn, QIcon(botCellSprite));
     btn->setProperty("state", secondPlayerCell);
+}
+
+void Game::setProtectedCell(QPoint p){
+    QPushButton * btn = field[p.x()][p.y()];
+    changeIcon(btn, QIcon(protectedCellSprite));
+    btn->setProperty("state", protectedCell);
 }
 
 void Game::checkEnd(){

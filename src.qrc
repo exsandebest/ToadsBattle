@@ -19,5 +19,6 @@
         <file>img/end_draw.png</file>
         <file>img/end_win.png</file>
         <file>img/end_lose.png</file>
+        <file>img/cell_protected.png</file>
     </qresource>
 </RCC>
