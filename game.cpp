@@ -8,6 +8,7 @@
 #include <QPropertyAnimation>
 #include <QDebug>
 #include <QThread>
+#include <random>
 
 extern int botLevel;
 
@@ -25,6 +26,7 @@ const QString emptyCellSprite = ":img/cell_empty.png";
 const QString protectedCellSprite = ":img/cell_protected.png";
 QString botCellSprite = "";
 toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
+std::mt19937 random(time(0));
 
 int playerScore = 0;
 int botScore = 0;
@@ -104,6 +106,7 @@ Game::Game(QWidget *parent) :
     updateScore(2, 1);
     setBotCell(QPoint(fieldSize - 1, fieldSize - 1));
     updateScore(2, 1);
+    setProtectedCell(QPoint((random() + 1) % 7, (random() + 1) % 7));
 }
 
 Game::~Game()
