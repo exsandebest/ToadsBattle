@@ -1,43 +1,13 @@
 #include "game.h"
 #include "ui_game.h"
-#include "basicstructures.h"
-#include "bots.h"
-#include "qmath.h"
-#include <QPushButton>
 #include "end.h"
 #include <QPropertyAnimation>
 #include <QDebug>
 #include <QThread>
-#include <random>
 #include <QRandomGenerator>
 
-extern int botLevel;
-
-const bool debug = false;
-
-const int fieldSize = 8;
-const int stepSize = 2;
-const int cloneSize = 1;
-const int grabSize = 1;
-const int maxProtectedCellCount = 3;
-const int animationDuration = 150; //ms
-const int standardDelay = 600; //ms
-const int dialogTimeout = 7; //s
-const QString playerCellSprite = ":img/cell_player.png";
-const QString emptyCellSprite = ":img/cell_empty.png";
-const QString protectedCellSprite = ":img/cell_protected.png";
-QString botCellSprite = "";
-toadsBattleBots *bot = new toadsBattleBots(fieldSize, botLevel, 2);
-
-bool skipClicked = false;
-QPoint selected;
-
-QPushButton * field[fieldSize][fieldSize];
-
-
-Game::Game(QWidget *parent) : QDialog(parent), ui(new Ui::Game) {
+Game::Game(QWidget *parent, int lvl) : QDialog(parent), ui(new Ui::Game), botLevel(lvl) {
     ui->setupUi(this);
-
     this->showMaximized();
     QApplication::processEvents();
     this->setFixedSize(this->size());
@@ -68,14 +38,13 @@ Game::Game(QWidget *parent) : QDialog(parent), ui(new Ui::Game) {
 
     ui->lbl_playerScore->setStyleSheet("color: white;");
     ui->lbl_botScore->setStyleSheet("color: white;");
+    ui->lbl_player->setPixmap(QPixmap(":img/toad_main.png")
+                              .scaled(ui->lbl_player->size(), Qt::KeepAspectRatio));
+    ui->lbl_bot->setPixmap(QPixmap(":img/toad_" + QString::number(botLevel) + ".png")
+                           .scaled(ui->lbl_bot->size(), Qt::KeepAspectRatio));
 
-    gameResult = 0;
-    playerScore = 0;
-    botScore = 0;
-    selectionState = 0;
     botCellSprite = ":img/cell_bot_" + QString::number(botLevel) + ".png";
-    ui->lbl_player->setPixmap(QPixmap(":img/toad_main.png").scaled(ui->lbl_player->size(), Qt::KeepAspectRatio));
-    ui->lbl_bot->setPixmap(QPixmap(":img/toad_" + QString::number(botLevel) + ".png").scaled(ui->lbl_bot->size(), Qt::KeepAspectRatio));
+    bot = new toadsBattleBots(fieldSize, this->botLevel, 2);
 
     for (int i = 0; i < fieldSize; ++i){
         for (int j = 0; j < fieldSize; ++j){

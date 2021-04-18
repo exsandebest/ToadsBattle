@@ -2,11 +2,7 @@
 #include "ui_mainwindow.h"
 #include "game.h"
 
-int botLevel = 1;
-
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     this->showMaximized();
     this->setFixedSize(this->size());
@@ -27,9 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lbl_toad_main->setPixmap(mainToadPixmap);
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
-}
+MainWindow::~MainWindow() { delete ui; }
 
 
 void MainWindow::on_btn_level_clicked() {
@@ -43,7 +37,7 @@ void MainWindow::on_btn_level_clicked() {
 void MainWindow::on_btn_startGame_clicked() {
     this->setVisible(false);
 
-    Game *gameWindow = new Game(this);
+    Game *gameWindow = new Game(this, botLevel);
     gameWindow->open();
     QApplication::processEvents();
 

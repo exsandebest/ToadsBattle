@@ -20,5 +20,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    int botLevel = 1;
 };
 #endif // MAINWINDOW_H
