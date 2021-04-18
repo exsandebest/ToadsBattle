@@ -7,12 +7,11 @@ namespace Ui {
 class End;
 }
 
-class End : public QDialog
-{
+class End : public QDialog {
     Q_OBJECT
 
 public:
-    explicit End(QWidget *parent = nullptr);
+    explicit End(QWidget *parent = nullptr, int gameResult = 0);
     ~End();
 
 signals:

@@ -7,8 +7,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -17,7 +16,6 @@ public:
 
 private slots:
     void on_btn_level_clicked();
-
     void on_btn_startGame_clicked();
 
 private:

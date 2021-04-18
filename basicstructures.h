@@ -1,8 +1,7 @@
 #ifndef TOADS_BATTLE_BASIC_STRUCTURES_H
 #define TOADS_BATTLE_BASIC_STRUCTURES_H
 
-class point
-{
+class point {
 public:
 	int x, y;
 	point() {
@@ -16,8 +15,7 @@ public:
 };
 
 
-class step
-{
+class step {
 public:
 	point beginPoint, endPoint;
 

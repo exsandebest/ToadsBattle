@@ -3,8 +3,8 @@
 #include <QApplication>
 #include <QStyleFactory>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
     qApp->setStyle(QStyleFactory::create("Fusion"));
     MainWindow w;
